@@ -1,7 +1,8 @@
-module github.com/mdp/qrterminal/v3
+module github.com/buengese/qrterminal
 
 require (
 	github.com/mattn/go-colorable v0.1.2
-	github.com/mdp/qrterminal v1.0.1
 	rsc.io/qr v0.2.0
 )
+
+go 1.13

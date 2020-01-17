@@ -8,11 +8,12 @@ import (
 	"strings"
 
 	"github.com/mattn/go-colorable"
-	"github.com/mdp/qrterminal/v3"
+	"github.com/buengese/qrterminal"
 	"rsc.io/qr"
 )
 
 var verboseFlag bool
+var halfsizeFlag bool
 var levelFlag string
 var quietZoneFlag int
 
@@ -31,6 +32,7 @@ func getLevel(s string) qr.Level {
 
 func main() {
 	flag.BoolVar(&verboseFlag, "v", false, "Output debugging information")
+	flag.BoolVar(&halfsizeFlag, "s", false, "Use smaller characters")
 	flag.StringVar(&levelFlag, "l", "L", "Error correction level")
 	flag.IntVar(&quietZoneFlag, "q", 2, "Size of quietzone border")
 
@@ -48,12 +50,26 @@ func main() {
 		os.Exit(1)
 	}
 
-	cfg := qrterminal.Config{
-		Level:     level,
-		Writer:    os.Stdout,
-		QuietZone: quietZoneFlag,
-		BlackChar: qrterminal.BLACK,
-		WhiteChar: qrterminal.WHITE,
+	var cfg qrterminal.Config
+	if !halfsizeFlag {
+		cfg = qrterminal.Config{
+			Level:     level,
+			Writer:    os.Stdout,
+			QuietZone: quietZoneFlag,
+			BlackChar: qrterminal.BLACK,
+			WhiteChar: qrterminal.WHITE,
+		}
+	} else {
+		cfg = qrterminal.Config{
+			Level:     level,
+			Writer:    os.Stdout,
+			QuietZone: quietZoneFlag,
+			HalfBlocks:     true,
+			BlackChar:      qrterminal.BLACK_BLACK,
+			WhiteBlackChar: qrterminal.WHITE_BLACK,
+			WhiteChar:      qrterminal.WHITE_WHITE,
+			BlackWhiteChar: qrterminal.BLACK_WHITE,
+		}
 	}
 
 	if verboseFlag {
